@@ -21,13 +21,15 @@ void reset()
 	{
 		for ( int j=1 ; j<type+1 ; j++ )
 		{
-			//假设每个位置都有九种可能 
+			//假设每个位置都有type种可能 
 			sign_count[i][j]=type;
+			//每个位置都是空 
 			checkerboard[i][j]=0;
+			//每个位置未曾填写 
 			sign[i][j][0]=false;
+			//假设每个位置的type种可能都是可实现的
 			for ( int k=1 ; k<type+1 ; k++ )
-			{
-				//假设每个位置的九种可能都是可实现的 
+			{ 
 				sign[i][j][k]=true;
 			}
 		}
