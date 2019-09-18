@@ -117,6 +117,7 @@ int inside(int x, int y)
 			}
 		}
 	}
+	//π¨∏Ò≈–∂œ 
 	int beginx, beginy;
 	if ( type==9 )
 	{
@@ -249,6 +250,7 @@ int outside(int x,int y)
 			}
 		}
 	}
+	//π¨∏Ò≈–∂œ 
 	int beginx, beginy;
 	if ( type==9 )
 	{
