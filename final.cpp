@@ -52,6 +52,7 @@ int write(int x,int y)
 			break;
 		}
 	}
+	/*//输出改变的位置和新棋盘 
 	cout<<x<<' '<<y<<'\n'; 
 	for ( int i=1 ; i<type+1 ; i++ )
 	{
@@ -61,6 +62,7 @@ int write(int x,int y)
 		}
 		cout<<'\n';
 	}
+	//输出每个位置的可能性 
 	cout<<'\n'<<"可能性：\n";
 	for ( int i=1 ; i<type+1 ; i++ )
 	{
@@ -70,12 +72,12 @@ int write(int x,int y)
 		}
 		cout<<'\n';
 	}
-	cout<<'\n';
+	cout<<'\n';*/
 	outside(x,y); 
 	return 0;
 } 
 
-//第二步，查出所有空缺的可能性（位置上还没有数字） 
+//查出所有空缺的可能性（位置上还没有数字） 
 //此时是扣除所在位置的可能性 
 int inside(int x, int y)
 {
