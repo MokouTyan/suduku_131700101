@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-//4996是为了提醒fopen、fclose、fscanf函数不安全的
+//屏蔽4996是为了提醒fopen、fclose、fscanf函数不安全的
 #pragma warning(disable:4996)
 using namespace std;
 int write(int x, int y);
