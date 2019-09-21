@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-//屏蔽4996是为了提醒fopen、fclose、fscanf函数不安全的
+//4996是为了提醒fopen、fclose、fscanf函数不安全的
 #pragma warning(disable:4996)
 using namespace std;
 int write(int x, int y);
@@ -322,9 +322,9 @@ int main(int argc, char *argv[])
 				//cout << checkerboard[i][j] << ' ';//
 			}
 			if( n != 1 && i==type && sign_complete){ fprintf(fp2, "\n\n"); }
-			else if (n != 1 && i == type && !sign_complete) { fprintf(fp2, "\n这道题有多个解存在，无法再填入任何一格\n因此棋盘中有空位\n\n"); }
+			else if (n != 1 && i == type && !sign_complete) { fprintf(fp2, "\n无法再确定地填入任何一格\n因此棋盘中有空位\n\n"); }
 			else if ( n == 1 && i == type && sign_complete){}
-			else if (n == 1 && i == type && !sign_complete) { fprintf(fp2, "\n这道题有多个解存在，无法再填入任何一格\n因此棋盘中有空位"); }
+			else if (n == 1 && i == type && !sign_complete) { fprintf(fp2, "\n无法再确定地填入任何一格\n因此棋盘中有空位"); }
 			else { fprintf(fp2, "\n");  }
 			//cout << '\n';//
 		}
