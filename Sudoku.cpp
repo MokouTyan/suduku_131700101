@@ -281,7 +281,7 @@ void check()
 			{
 				for (int j = 1; j < type + 1; j++)
 				{
-					if (sign[i][j][k] && !sign[i][j][0] )
+					if (sign[i][j][k] && !sign[i][j][0])
 					{
 						//这个位置标记为存在数字 
 						sign[i][j][0] = true;
@@ -319,7 +319,7 @@ void check()
 			{
 				for (int i = 1; i < type + 1; i++)
 				{
-					if (sign[i][j][k] && !sign[i][j][0] )
+					if (sign[i][j][k] && !sign[i][j][0])
 					{
 						//这个位置标记为存在数字 
 						sign[i][j][0] = true;
@@ -370,15 +370,6 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
-		for (int i = 1; i < type + 1; i++)
-		{
-			for (int j = 1; j < type + 1; j++)
-			{
-				cout << checkerboard[i][j] << ' ';
-			}
-			cout << '\n';
-		}
-		cout << '\n';
 		//关闭input文件
 		//以只写方式打开文件
 		fp2 = fopen(OutputName, "a");
@@ -416,26 +407,26 @@ int main(int argc, char *argv[])
 					//cout << ' ';
 				}
 			}
-			if (n != 1 && i == type && sign_complete) 
-			{ 
+			if (n != 1 && i == type && sign_complete)
+			{
 				//cout << "\n\n";  
-				fprintf(fp2, "\n\n"); 
+				fprintf(fp2, "\n\n");
 			}
 			else if (n != 1 && i == type && !sign_complete)
 			{
 				//cout << "\n无法再确定地填入任何一格\n因此棋盘中有空位\n\n";
 				fprintf(fp2, "\n无法再确定地填入任何一格\n因此棋盘中有空位\n\n");
 			}
-			else if ( n == 1 && i == type && sign_complete){}
-			else if (n == 1 && i == type && !sign_complete) 
-			{ 
+			else if (n == 1 && i == type && sign_complete) {}
+			else if (n == 1 && i == type && !sign_complete)
+			{
 				//cout << "\n无法再确定地填入任何一格\n因此棋盘中有空位";
 				fprintf(fp2, "\n无法再确定地填入任何一格\n因此棋盘中有空位");
 			}
-			else 
+			else
 			{
 				//cout << "\n";
-				fprintf(fp2, "\n");  
+				fprintf(fp2, "\n");
 			}
 		}
 		//cout << '\n';//
