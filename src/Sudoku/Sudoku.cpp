@@ -18,6 +18,9 @@ int checkerboard[10][10];
 //记录类型
 int type;
 int small_sign[10];
+//用于记录是否有变化
+bool change;
+int chess_count;
 
 
 //重置棋盘和标记 
@@ -47,6 +50,8 @@ void reset()
 int write(int x, int y)
 {
 	//这个位置标记为存在数字 
+	change = true;
+	chess_count--;
 	sign[x][y][0] = true;
 	sign_count[x][y] = 0;
 	//填入数字 
@@ -284,6 +289,8 @@ void check()
 					if (sign[i][j][k] && !sign[i][j][0])
 					{
 						//这个位置标记为存在数字 
+						chess_count--;
+						change = true;
 						sign[i][j][0] = true;
 						sign_count[i][j] = 0;
 						checkerboard[i][j] = k;
@@ -321,7 +328,9 @@ void check()
 				{
 					if (sign[i][j][k] && !sign[i][j][0])
 					{
-						//这个位置标记为存在数字 
+						//这个位置标记为存在数字
+						chess_count--;
+						change = true;
 						sign[i][j][0] = true;
 						sign_count[i][j] = 0;
 						checkerboard[i][j] = k;
@@ -367,30 +376,39 @@ int main(int argc, char *argv[])
 				{
 					sign[i][j][0] = true;
 					sign_count[i][j] = 0;
+					chess_count--;
 				}
 			}
 		}
-		//关闭input文件
+		//棋盘上以填格子的数量，当它等于零的时候棋盘被填满
+		chess_count = type * type;
+		change = true;
+		while (chess_count != 0 && change)
+		{
+			//先默认棋盘不发生变化
+			change = false;
+			//找出空缺位置
+			for (int k = 0; k < 2; k++)
+			{
+				for (int i = 1; i < type + 1; i++)
+				{
+					for (int j = 1; j < type + 1; j++)
+					{
+						if (!sign[i][j][0])
+						{
+							inside(i, j);
+						}
+					}
+				}
+			}
+			check();
+		}
 		//以只写方式打开文件
 		fp2 = fopen(OutputName, "a");
 		if (fp2 == NULL)
 			return -1;
-		//找出空缺位置
-		for (int k = 0; k < 2; k++)
-		{
-			for (int i = 1; i < type + 1; i++)
-			{
-				for (int j = 1; j < type + 1; j++)
-				{
-					if (!sign[i][j][0])
-					{
-						inside(i, j);
-					}
-				}
-			}
-		}
+		
 		bool sign_complete = true;
-		check();
 		for (int i = 1; i < type + 1; i++)
 		{
 			for (int j = 1; j < type + 1; j++)
