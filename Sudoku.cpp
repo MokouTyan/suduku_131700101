@@ -1,39 +1,42 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-//4996ÊÇÎªÁËÌáĞÑfopen¡¢fclose¡¢fscanfº¯Êı²»°²È«µÄ
+//4996æ˜¯ä¸ºäº†æé†’fopenã€fcloseã€fscanfå‡½æ•°ä¸å®‰å…¨çš„
 #pragma warning(disable:4996)
 using namespace std;
 int write(int x, int y);
 int inside(int x, int y);
 int outside(int x, int y);
 void check();
-//¼ÇÂ¼ÆåÅÌÉÏµÄ±ê¼Çµã 
+//è®°å½•æ£‹ç›˜ä¸Šçš„æ ‡è®°ç‚¹ 
 bool sign[10][10][10];
-//¼ÇÂ¼±ê¼ÇµãµÄ¿ÉÄÜĞÔÊ£Óà¸öÊı 
+//è®°å½•æ ‡è®°ç‚¹çš„å¯èƒ½æ€§å‰©ä½™ä¸ªæ•° 
 int sign_count[10][10];
-//¼ÇÂ¼ÆåÅÌ 
+//è®°å½•æ£‹ç›˜ 
 int checkerboard[10][10];
-//¼ÇÂ¼ÀàĞÍ
+//è®°å½•ç±»å‹
 int type;
 int small_sign[10];
+//ç”¨äºè®°å½•æ˜¯å¦æœ‰å˜åŒ–
+bool change;
+int chess_count;
 
 
-//ÖØÖÃÆåÅÌºÍ±ê¼Ç 
+//é‡ç½®æ£‹ç›˜å’Œæ ‡è®° 
 void reset()
 {
 	for (int i = 1; i < type + 1; i++)
 	{
 		for (int j = 1; j < type + 1; j++)
 		{
-			//¼ÙÉèÃ¿¸öÎ»ÖÃ¶¼ÓĞtypeÖÖ¿ÉÄÜ 
+			//å‡è®¾æ¯ä¸ªä½ç½®éƒ½æœ‰typeç§å¯èƒ½ 
 			sign_count[i][j] = type;
-			//Ã¿¸öÎ»ÖÃ¶¼ÊÇ¿Õ 
+			//æ¯ä¸ªä½ç½®éƒ½æ˜¯ç©º 
 			checkerboard[i][j] = 0;
-			//Ã¿¸öÎ»ÖÃÎ´ÔøÌîĞ´ 
+			//æ¯ä¸ªä½ç½®æœªæ›¾å¡«å†™ 
 			sign[i][j][0] = false;
-			//¼ÙÉèÃ¿¸öÎ»ÖÃµÄtypeÖÖ¿ÉÄÜ¶¼ÊÇ¿ÉÊµÏÖµÄ
+			//å‡è®¾æ¯ä¸ªä½ç½®çš„typeç§å¯èƒ½éƒ½æ˜¯å¯å®ç°çš„
 			for (int k = 1; k < type + 1; k++)
 			{
 				sign[i][j][k] = true;
@@ -43,13 +46,15 @@ void reset()
 	return;
 }
 
-//ÌîÈëÈ·¶¨Öµ 
+//å¡«å…¥ç¡®å®šå€¼ 
 int write(int x, int y)
 {
-	//Õâ¸öÎ»ÖÃ±ê¼ÇÎª´æÔÚÊı×Ö 
+	//è¿™ä¸ªä½ç½®æ ‡è®°ä¸ºå­˜åœ¨æ•°å­— 
+	change = true;
+	chess_count--;
 	sign[x][y][0] = true;
 	sign_count[x][y] = 0;
-	//ÌîÈëÊı×Ö 
+	//å¡«å…¥æ•°å­— 
 	for (int i = 1; i < type + 1; i++)
 	{
 		if (sign[x][y][i])
@@ -58,7 +63,7 @@ int write(int x, int y)
 			break;
 		}
 	}
-	/*//Êä³ö¸Ä±äµÄÎ»ÖÃºÍĞÂÆåÅÌ
+	/*//è¾“å‡ºæ”¹å˜çš„ä½ç½®å’Œæ–°æ£‹ç›˜
 	cout<<x<<' '<<y<<'\n';
 	for ( int i=1 ; i<type+1 ; i++ )
 	{
@@ -68,8 +73,8 @@ int write(int x, int y)
 		}
 		cout<<'\n';
 	}
-	//Êä³öÃ¿¸öÎ»ÖÃµÄ¿ÉÄÜĞÔ
-	cout<<'\n'<<"¿ÉÄÜĞÔ£º\n";
+	//è¾“å‡ºæ¯ä¸ªä½ç½®çš„å¯èƒ½æ€§
+	cout<<'\n'<<"å¯èƒ½æ€§ï¼š\n";
 	for ( int i=1 ; i<type+1 ; i++ )
 	{
 		for ( int j=1 ; j<type+1 ; j++ )
@@ -83,24 +88,24 @@ int write(int x, int y)
 	return 0;
 }
 
-//²é³öËùÓĞ¿ÕÈ±µÄ¿ÉÄÜĞÔ£¨Î»ÖÃÉÏ»¹Ã»ÓĞÊı×Ö£© 
-//´ËÊ±ÊÇ¿Û³ıËùÔÚÎ»ÖÃµÄ¿ÉÄÜĞÔ 
+//æŸ¥å‡ºæ‰€æœ‰ç©ºç¼ºçš„å¯èƒ½æ€§ï¼ˆä½ç½®ä¸Šè¿˜æ²¡æœ‰æ•°å­—ï¼‰ 
+//æ­¤æ—¶æ˜¯æ‰£é™¤æ‰€åœ¨ä½ç½®çš„å¯èƒ½æ€§ 
 int inside(int x, int y)
 {
-	//ÅÅ³ıºá×İÏò¿ÉÄÜĞÔ
+	//æ’é™¤æ¨ªçºµå‘å¯èƒ½æ€§
 	int remove;
 	for (int i = 1; i < type + 1; i++)
 	{
-		//Èç¹û¼ì²âÎ»ÖÃ´æÔÚÊı 
+		//å¦‚æœæ£€æµ‹ä½ç½®å­˜åœ¨æ•° 
 		if (sign[x][i][0])
 		{
 			remove = checkerboard[x][i];
-			//ÔòÕâ¸ö¿ÕÎ»²»ÄÜ³öÏÖÏàÍ¬Êı×Ö
-			//·ÀÖ¹sign_count±»Îó¼õÈ¥£¬Ç°ÃæÏÈÅĞ¶ÏÊÇ²»ÊÇÒÑ¾­±ä·ñÁË£¬Î´±ä·ñ²Å±ä·ñ 
+			//åˆ™è¿™ä¸ªç©ºä½ä¸èƒ½å‡ºç°ç›¸åŒæ•°å­—
+			//é˜²æ­¢sign_countè¢«è¯¯å‡å»ï¼Œå‰é¢å…ˆåˆ¤æ–­æ˜¯ä¸æ˜¯å·²ç»å˜å¦äº†ï¼Œæœªå˜å¦æ‰å˜å¦ 
 			if (sign[x][y][remove])
 			{
 				sign[x][y][remove] = false;
-				//¿ÉÄÜĞÔ-1
+				//å¯èƒ½æ€§-1
 				sign_count[x][y]--;
 			}
 			if (sign_count[x][y] == 1 && !sign[x][y][0])
@@ -127,7 +132,7 @@ int inside(int x, int y)
 			}
 		}
 	}
-	//¹¬¸ñÅĞ¶Ï 
+	//å®«æ ¼åˆ¤æ–­ 
 	if (type == 4 || type == 6 || type == 8 || type == 9)
 	{
 		int beginx, beginy;
@@ -173,16 +178,16 @@ int inside(int x, int y)
 			}
 		}
 	}
-	//¾­¹ıÉÏÃæµÄÅĞ¶Ï£¬Èç¹û¸ÃÎ»ÖÃÖ»Ê£ÏÂÒ»ÖÖ¿ÉÄÜĞÔ£¬ÄÇÃ´Ö´ĞĞwrite()
+	//ç»è¿‡ä¸Šé¢çš„åˆ¤æ–­ï¼Œå¦‚æœè¯¥ä½ç½®åªå‰©ä¸‹ä¸€ç§å¯èƒ½æ€§ï¼Œé‚£ä¹ˆæ‰§è¡Œwrite()
 	return 0;
 }
 
 
-//È¥³ıËùÌîÎ»ÖÃµÄºá×İ¾Å¹¬¸ñËùÓĞÍ¬Êı¿ÉÄÜĞÔ£¨Î»ÖÃÉÏ¸ÕÌîÈëÊı×Ö£© 
-//´ËÊ±ÊÇ¿Û³ıËùÌîÎ»ÖÃµÄºá×İ¾Å¹¬¸ñµÄÆäËûÎ»ÖÃ¿ÉÄÜĞÔ 
+//å»é™¤æ‰€å¡«ä½ç½®çš„æ¨ªçºµä¹å®«æ ¼æ‰€æœ‰åŒæ•°å¯èƒ½æ€§ï¼ˆä½ç½®ä¸Šåˆšå¡«å…¥æ•°å­—ï¼‰ 
+//æ­¤æ—¶æ˜¯æ‰£é™¤æ‰€å¡«ä½ç½®çš„æ¨ªçºµä¹å®«æ ¼çš„å…¶ä»–ä½ç½®å¯èƒ½æ€§ 
 int outside(int x, int y)
 {
-	//removeÊÇµ±Ç°Î»ÖÃÌîÈëµÄÊı×Ö 
+	//removeæ˜¯å½“å‰ä½ç½®å¡«å…¥çš„æ•°å­— 
 	int remove = checkerboard[x][y];
 	for (int i = 1; i < type + 1; i++)
 	{
@@ -208,7 +213,7 @@ int outside(int x, int y)
 			}
 		}
 	}
-	//¹¬¸ñÅĞ¶Ï 
+	//å®«æ ¼åˆ¤æ–­ 
 	if (type == 4 || type == 6 || type == 8 || type == 9)
 	{
 		int beginx, beginy;
@@ -255,7 +260,7 @@ int outside(int x, int y)
 
 void check()
 {
-	//¼ì²éÃ¿Ò»ºá
+	//æ£€æŸ¥æ¯ä¸€æ¨ª
 	for (int i = 1; i < type + 1; i++)
 	{
 		for (int j = 1; j < type + 1; j++)
@@ -283,7 +288,9 @@ void check()
 				{
 					if (sign[i][j][k] && !sign[i][j][0])
 					{
-						//Õâ¸öÎ»ÖÃ±ê¼ÇÎª´æÔÚÊı×Ö 
+						//è¿™ä¸ªä½ç½®æ ‡è®°ä¸ºå­˜åœ¨æ•°å­— 
+						chess_count--;
+						change = true;
 						sign[i][j][0] = true;
 						sign_count[i][j] = 0;
 						checkerboard[i][j] = k;
@@ -293,7 +300,7 @@ void check()
 			}
 		}
 	}
-	//¼ì²éÃ¿Ò»×İ
+	//æ£€æŸ¥æ¯ä¸€çºµ
 	for (int j = 1; j < type + 1; j++)
 	{
 		for (int i = 1; i < type + 1; i++)
@@ -321,7 +328,9 @@ void check()
 				{
 					if (sign[i][j][k] && !sign[i][j][0])
 					{
-						//Õâ¸öÎ»ÖÃ±ê¼ÇÎª´æÔÚÊı×Ö 
+						//è¿™ä¸ªä½ç½®æ ‡è®°ä¸ºå­˜åœ¨æ•°å­—
+						chess_count--;
+						change = true;
 						sign[i][j][0] = true;
 						sign_count[i][j] = 0;
 						checkerboard[i][j] = k;
@@ -342,21 +351,21 @@ int main(int argc, char *argv[])
 	n = atoi(argv[4]);
 	char* InputName = argv[6];
 	char* OutputName = argv[8];
-	//ÒÔÖ»¶Á·½Ê½´ò¿ªÎÄ¼ş
+	//ä»¥åªè¯»æ–¹å¼æ‰“å¼€æ–‡ä»¶
 	fp1 = fopen(InputName, "r");
 	if (fp1 == NULL) //
 		return -1;
 	//fscanf(fp1, "%d%d", &type,&n);
-	//´ò¿ªoutput.txt£¬²¢Á¢¼´¹Ø±Õ£¬ÒâÒåÎªÇå¿ÕÎÄ±¾ÄÚÈİ
+	//æ‰“å¼€output.txtï¼Œå¹¶ç«‹å³å…³é—­ï¼Œæ„ä¹‰ä¸ºæ¸…ç©ºæ–‡æœ¬å†…å®¹
 	fp2 = fopen(OutputName, "w");
 	if (fp2 == NULL) //
 		return -1;
 	fclose(fp2);
 	while (n > 0)
 	{
-		//ÖØÖÃÆåÅÌ 
+		//é‡ç½®æ£‹ç›˜ 
 		reset();
-		//ÊäÈëÆåÅÌ 
+		//è¾“å…¥æ£‹ç›˜ 
 		for (int i = 1; i < type + 1; i++)
 		{
 			for (int j = 1; j < type + 1; j++)
@@ -367,40 +376,46 @@ int main(int argc, char *argv[])
 				{
 					sign[i][j][0] = true;
 					sign_count[i][j] = 0;
+					chess_count--;
 				}
 			}
 		}
-		//¹Ø±ÕinputÎÄ¼ş
-		//ÒÔÖ»Ğ´·½Ê½´ò¿ªÎÄ¼ş
-		fp2 = fopen(OutputName, "a");
-		if (fp2 == NULL)
-			return -1;
-		//ÕÒ³ö¿ÕÈ±Î»ÖÃ
-		for (int k = 0; k < 2; k++)
+		//æ£‹ç›˜ä¸Šä»¥å¡«æ ¼å­çš„æ•°é‡ï¼Œå½“å®ƒç­‰äºé›¶çš„æ—¶å€™æ£‹ç›˜è¢«å¡«æ»¡
+		chess_count = type * type;
+		change = true;
+		while (chess_count != 0 && change)
 		{
-			for (int i = 1; i < type + 1; i++)
+			//å…ˆé»˜è®¤æ£‹ç›˜ä¸å‘ç”Ÿå˜åŒ–
+			change = false;
+			//æ‰¾å‡ºç©ºç¼ºä½ç½®
+			for (int k = 0; k < 2; k++)
 			{
-				for (int j = 1; j < type + 1; j++)
+				for (int i = 1; i < type + 1; i++)
 				{
-					if (!sign[i][j][0])
+					for (int j = 1; j < type + 1; j++)
 					{
-						inside(i, j);
+						if (!sign[i][j][0])
+						{
+							inside(i, j);
+						}
 					}
 				}
 			}
+			check();
 		}
+		//ä»¥åªå†™æ–¹å¼æ‰“å¼€æ–‡ä»¶
+		fp2 = fopen(OutputName, "a");
+		if (fp2 == NULL)
+			return -1;
+		
 		bool sign_complete = true;
-		check();
+		if (chess_count != 0) sign_complete = false;
 		for (int i = 1; i < type + 1; i++)
 		{
 			for (int j = 1; j < type + 1; j++)
 			{
 				//cout << checkerboard[i][j];
 				fprintf(fp2, "%d", checkerboard[i][j]);
-				if (checkerboard[i][j] == 0)
-				{
-					sign_complete = false;
-				}
 				if (j != type)
 				{
 					fprintf(fp2, " ");
@@ -414,14 +429,14 @@ int main(int argc, char *argv[])
 			}
 			else if (n != 1 && i == type && !sign_complete)
 			{
-				//cout << "\nÎŞ·¨ÔÙÈ·¶¨µØÌîÈëÈÎºÎÒ»¸ñ\nÒò´ËÆåÅÌÖĞÓĞ¿ÕÎ»\n\n";
-				fprintf(fp2, "\nÎŞ·¨ÔÙÈ·¶¨µØÌîÈëÈÎºÎÒ»¸ñ\nÒò´ËÆåÅÌÖĞÓĞ¿ÕÎ»\n\n");
+				//cout << "\næ— æ³•å†ç¡®å®šåœ°å¡«å…¥ä»»ä½•ä¸€æ ¼\nå› æ­¤æ£‹ç›˜ä¸­æœ‰ç©ºä½\n\n";
+				fprintf(fp2, "\næ— æ³•å†ç¡®å®šåœ°å¡«å…¥ä»»ä½•ä¸€æ ¼\nå› æ­¤æ£‹ç›˜ä¸­æœ‰ç©ºä½\n\n");
 			}
 			else if (n == 1 && i == type && sign_complete) {}
 			else if (n == 1 && i == type && !sign_complete)
 			{
-				//cout << "\nÎŞ·¨ÔÙÈ·¶¨µØÌîÈëÈÎºÎÒ»¸ñ\nÒò´ËÆåÅÌÖĞÓĞ¿ÕÎ»";
-				fprintf(fp2, "\nÎŞ·¨ÔÙÈ·¶¨µØÌîÈëÈÎºÎÒ»¸ñ\nÒò´ËÆåÅÌÖĞÓĞ¿ÕÎ»");
+				//cout << "\næ— æ³•å†ç¡®å®šåœ°å¡«å…¥ä»»ä½•ä¸€æ ¼\nå› æ­¤æ£‹ç›˜ä¸­æœ‰ç©ºä½";
+				fprintf(fp2, "\næ— æ³•å†ç¡®å®šåœ°å¡«å…¥ä»»ä½•ä¸€æ ¼\nå› æ­¤æ£‹ç›˜ä¸­æœ‰ç©ºä½");
 			}
 			else
 			{

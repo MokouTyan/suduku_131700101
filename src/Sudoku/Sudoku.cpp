@@ -409,16 +409,13 @@ int main(int argc, char *argv[])
 			return -1;
 		
 		bool sign_complete = true;
+		if (chess_count != 0) sign_complete = false;
 		for (int i = 1; i < type + 1; i++)
 		{
 			for (int j = 1; j < type + 1; j++)
 			{
 				//cout << checkerboard[i][j];
 				fprintf(fp2, "%d", checkerboard[i][j]);
-				if (checkerboard[i][j] == 0)
-				{
-					sign_complete = false;
-				}
 				if (j != type)
 				{
 					fprintf(fp2, " ");
