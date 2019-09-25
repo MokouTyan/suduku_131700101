@@ -347,10 +347,32 @@ int main(int argc, char *argv[])
 	int n;
 	FILE* fp1;
 	FILE* fp2;
-	type = atoi(argv[2]);
-	n = atoi(argv[4]);
-	char* InputName = argv[6];
-	char* OutputName = argv[8];
+	char* InputName = NULL;
+	char* OutputName = NULL;
+	string a = "-m", b = "-n", c= "-i", d="-o";
+	for (int i = 1; i < argc; i++ )
+	{
+		if (argv[i] == a)
+		{
+			type = argv[++i][0] - '0';
+		}
+		else if (argv[i] == b)
+		{
+			n = argv[++i][0] - '0';
+		}
+		else if (argv[i] == c)
+		{
+			InputName = argv[++i];
+		}
+		else if (argv[i] == d)
+		{
+			OutputName = argv[++i];
+		}
+	}
+	//type = atoi(argv[2]);
+	//n = atoi(argv[4]);
+	//char* InputName = argv[6];
+	//char* OutputName = argv[8];
 	//以只读方式打开文件
 	fp1 = fopen(InputName, "r");
 	if (fp1 == NULL) //
@@ -409,11 +431,14 @@ int main(int argc, char *argv[])
 			return -1;
 		
 		bool sign_complete = true;
-		if (chess_count != 0) sign_complete = false;
 		for (int i = 1; i < type + 1; i++)
 		{
 			for (int j = 1; j < type + 1; j++)
 			{
+				if (checkerboard[i][j] == 0)
+				{
+					sign_complete = false;
+				}
 				//cout << checkerboard[i][j];
 				fprintf(fp2, "%d", checkerboard[i][j]);
 				if (j != type)
